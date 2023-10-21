@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>User Sign-Up</h1>
+    <form  class="signup-form" id="signup-form" onsubmit="signup(event)">
+        <input type="text" name="name" id="name" placeholder="Name" required><br>
+        <input type="email" id="email" placeholder="Email" name="email" required><br>
+        <input type="password" name="password" id="password" placeholder="password" required><br>
+        <input type="submit" value="SignUp">
+    </form>
+    <script>
+        async function signup(e){
+            e.preventDefault();
+            obj={
+                name:document.getElementById('name').value,
+                email:document.getElementById('email').value,
+                password:document.getElementById('password').value
+            }
+            try{
+                const res = await axios.post('/user/signup',obj);
+                if(res.status==201){
+                    document.location='/user/login';
+                }else{
+                    document.body.innerHTML+=`<h4>${res.data.message}`;
+                    setTimeout(() => {
+                        document.body.lastElementChild.remove();
+                    }, 2000);
+                }
+            }catch(err){
+                console.log(err,res.data.message)
+            }
+        }
+    </script>
+</body>
+</html>

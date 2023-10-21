@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>User Login</h1>
+    <form class="login-form" id="login-form" onsubmit="login(event)">
+        <input type="email" placeholder="Email" name="email" id="email" required>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+    </form>
+    <script>
+        async function login(e){
+            e.preventDefault();
+            obj={
+                email:document.getElementById('email').value,
+                password:document.getElementById('password').value
+            }
+            try{
+                const res = await axios.post('/user/login',obj);
+                if(res.status==201){
+                    localStorage.setItem('token',res.data.token);
+                    document.location='/';
+                }else{
+                    document.body.innerHTML+=`<h4>${res.data.message}`;
+                    setTimeout(() => {
+                        document.body.lastElementChild.remove();
+                    }, 2000);
+                }
+            }catch(err){
+                console.log(err)
+            }
+        }
+    </script>
+</body>
+</html>
